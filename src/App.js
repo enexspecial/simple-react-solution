@@ -1,33 +1,65 @@
+import {Component} from 'react';
+
 // Style Modules Import
 import classess from './App.module.css';
 
-// Product Data import
-import ProductData from './ProductData';
-import ProductPreview from './ProductPreview';
-import ProductDetails from './ProductDetails';
+// components
+import ProductPreview from './ProductPreview/ProductPreview';
+import ProductDetails from './ProductDetails/ProductDetails';
+import TopBar from './TopBar/TopBar';
 
-function App() {
- 
+// Data From ProductData
+import ProductData from './Utils/ProductData';
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <nav className={classess.Topbar}>
-          <img src="https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.doorwaysva.org%2Fwp-content%2Fuploads%2F2019%2F06%2Famazon-logo.png&imgrefurl=https%3A%2F%2Fwww.doorwaysva.org%2Famazonhq-employeematch%2Famazon-logo-2%2F&tbnid=Wv18lweVWWl5lM&vet=12ahUKEwi74O3SnNLzAhWngM4BHXnPCbcQMygDegUIARDYAQ..i&docid=zZRL9lpX90EqdM&w=1800&h=1200&q=amazon%20logo&ved=2ahUKEwi74O3SnNLzAhWngM4BHXnPCbcQMygDegUIARDYAQ" alt="amazon-logo"/>
-        </nav>
-      </header>
 
-      <div className={classess.MainContainer}>
-        <div className={classess.ProductPreview}>
-            <ProductPreview/>
+
+class App extends Component{
+
+  state = {
+    ProductData: ProductData,
+    currentPreviewImagePos:0,
+    currentSelectedFeature:0
+  }
+
+  onColorOptionClick = (pos) =>{
+    this.setState({currentPreviewImagePos: pos})
+  }
+
+  onFeatureItemClick = (pos) => {
+    this.setState({currentSelectedFeature: pos});
+  }
+
+  render(){
+
+    return (
+      <div className="App">
+        <TopBar/>      
+  
+        <div className={classess.MainContainer}>
+          <div className={classess.ProductPreview}>
+              <ProductPreview 
+                currentPreviewImage={this.state.ProductData.colorOptions[this.state.currentPreviewImagePos].imageUrl}
+                currentSelectedFeature={this.state.currentSelectedFeature}
+               
+                />
+          </div>
+  
+          <div className={classess.ProductData}>
+            <ProductDetails data={this.state.ProductData}
+             onColorOptionClick={this.onColorOptionClick}
+             currentPreviewImagePos={this.state.currentPreviewImagePos}
+             onFeatureItemClick={this.onFeatureItemClick}
+             currentSelectedFeature={this.state.currentSelectedFeature}
+             />
+          </div> 
         </div>
-
-        <div className={classess.ProductData}>
-          <ProductDetails/>
-        </div> 
       </div>
-    </div>
-  );
+    );
+    
+  }
+
 }
+
+
 
 export default App;
